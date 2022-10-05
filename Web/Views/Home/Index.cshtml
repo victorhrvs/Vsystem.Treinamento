@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+
+
+    <form method="post" asp-action="Resultado">
+        <input type="text" id="pesquisa" name="pesquisa" />
+        <button onclick="submit">Pesquisar</button>
+    </form>
+
+    <a asp-controller="Alunos" asp-action="Index">Alunos</a>
+    <a asp-controller="Enderecos" asp-action="Index">Endereço</a>
+    
+
+</div>

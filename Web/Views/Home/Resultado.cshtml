@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Domain.Models.Aluno>
+
+
+@{
+    ViewData["Title"] = "Resultado";
+    
+}
+
+<div class="text-center">
+    <h1 class="display-4">Resultado</h1>
+    <a asp-controller="Alunos" asp-action="Index">Alunos</a>
+    <a asp-controller="Endereco" asp-action="Index">Endereço</a>
+    <a asp-controller="Home" asp-action="Resultado">Resultado</a>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Nome
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Endereco_id
+                </th>
+                <th>
+                    UF
+                </th>
+                <th>
+                    Endereço
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EnderecoFk)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EnderecoFkNavigation.Uf)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EnderecoFkNavigation.Address)
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
