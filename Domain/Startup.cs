@@ -8,11 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Domain.Models;
+using Domain.Repositories;
+using Domain.Interfaces;
+using DataAccess.EFCore.Repositories;
+using Domain.Entities;
 
 namespace Domain
 {
@@ -30,6 +30,10 @@ namespace Domain
         {
 
             services.AddControllers();
+            services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            //services.AddTransient<IProjectRepository, ProjectRepository>();
+            //services.AddTransient<IRepository, EnderecoRepository>();
+            //services.AddScoped<AlunoRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Domain", Version = "v1" });

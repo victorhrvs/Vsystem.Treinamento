@@ -6,16 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Domain.Models;
+using Domain.Entities;
+using Domain.Repositories;
 
 namespace Domain.Controllers
 {
     public class EnderecosController : Controller
     {
-        private readonly TreinamentoContext _context;
-
-        public EnderecosController(TreinamentoContext context)
+        private readonly EnderecoRepository _enderecoRepository;
+        public EnderecosController(EnderecoRepository enderecoRepository)
         {
-            _context = context;
+            _enderecoRepository = enderecoRepository;
         }
 
         // Content
@@ -34,27 +35,21 @@ namespace Domain.Controllers
 
 
         // GET: Enderecos
-        public async Task<IActionResult> Index()
+        public  IActionResult Index()
         {
-            return View(await _context.Enderecos.ToListAsync());
+            return View(model: _enderecoRepository.GetAll());
         }
 
         // GET: Enderecos/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var endereco = await _context.Enderecos
-                .FirstOrDefaultAsync(m => m.EnderecoId == id);
-            if (endereco == null)
-            {
-                return NotFound();
-            }
 
-            return View(endereco);
+            return View(_enderecoRepository.GetById((int)id));
         }
 
         // GET: Enderecos/Create
@@ -68,33 +63,28 @@ namespace Domain.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EnderecoId,Uf,Address")] Endereco endereco)
+        public IActionResult Create([Bind("EnderecoId,Uf,Address")] Endereco endereco)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(endereco);
-                await _context.SaveChangesAsync();
+                _enderecoRepository.Add(endereco);
+
                 return RedirectToAction(nameof(Index));
             }
             return View(endereco);
         }
 
         // GET: Enderecos/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var endereco = await _context.Enderecos.FindAsync(id);
-            if (endereco == null)
-            {
-                return NotFound();
-            }
-            return View(endereco);
+            return View(_enderecoRepository.GetById((int)id));
         }
-
+        /**
         // POST: Enderecos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -111,8 +101,8 @@ namespace Domain.Controllers
             {
                 try
                 {
-                    _context.Update(endereco);
-                    await _context.SaveChangesAsync();
+                    //_context.Update(endereco);
+                    //await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -138,8 +128,8 @@ namespace Domain.Controllers
                 return NotFound();
             }
 
-            var endereco = await _context.Enderecos
-                .FirstOrDefaultAsync(m => m.EnderecoId == id);
+            //var endereco = await _context.Enderecos
+            //    .FirstOrDefaultAsync(m => m.EnderecoId == id);
             if (endereco == null)
             {
                 return NotFound();
@@ -163,5 +153,7 @@ namespace Domain.Controllers
         {
             return _context.Enderecos.Any(e => e.EnderecoId == id);
         }
+
+        **/
     }
 }

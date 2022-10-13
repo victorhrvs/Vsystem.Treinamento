@@ -1,4 +1,7 @@
+using DataAccess.EFCore.Repositories;
+using Domain.Entities;
 using Domain.Models;
+using Domain.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +29,10 @@ namespace Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddTransient< AlunoRepository>();
+            services.AddTransient<GenericRepository<Aluno>>();
+            services.AddTransient<EnderecoRepository>();
+            services.AddTransient<GenericRepository<Endereco>>();
             services.AddDbContext<TreinamentoContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Treinamento")));
 

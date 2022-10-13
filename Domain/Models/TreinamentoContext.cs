@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Domain.Entities;
 
 #nullable disable
 
@@ -82,6 +83,11 @@ namespace Domain.Models
             });
 
             OnModelCreatingPartial(modelBuilder);
+        }
+
+        internal object Find(int id)
+        {
+            throw new NotImplementedException();
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
