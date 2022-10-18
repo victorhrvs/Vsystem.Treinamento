@@ -10,13 +10,19 @@ namespace Domain.Entities
     public class Aluno 
     {
         [StringLength(100)]
-        public int Matricula { get; private set; }
+        public int Matricula { get; set; }
         [StringLength(100)]
-        public string Nome { get; private set; }
+        public string Nome { get; set; }
         [StringLength(100)]
-        public string Email { get; private set; }
-        public int? EnderecoFk { get; private set; }
+        public string Email { get; set; }
+        [StringLength(4)]
+        public int EnderecoFk { get; set; }
 
         public virtual Endereco EnderecoFkNavigation { get; set; }
+
+        public static explicit operator bool(Aluno v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

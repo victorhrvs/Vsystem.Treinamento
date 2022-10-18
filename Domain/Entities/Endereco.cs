@@ -17,5 +17,10 @@ namespace Domain.Entities
         public string Address { get; set; }
 
         public virtual ICollection<Aluno> Alunos { get; set; }
+
+        public static explicit operator bool(Endereco v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

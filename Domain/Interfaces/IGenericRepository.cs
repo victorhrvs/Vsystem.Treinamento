@@ -13,5 +13,9 @@ namespace Domain.Interfaces
         IEnumerable<T> Find(Expression<Func<T, bool>> expression);
         void Add(T entity);
         void Remove(T entity);
+        void Save();
+        void Update(T entity);
+
+
     }
 }

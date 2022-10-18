@@ -67,7 +67,10 @@ namespace Domain.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                
                 _enderecoRepository.Add(endereco);
+                _enderecoRepository.Save();
 
                 return RedirectToAction(nameof(Index));
             }
@@ -84,13 +87,13 @@ namespace Domain.Controllers
 
             return View(_enderecoRepository.GetById((int)id));
         }
-        /**
+        
         // POST: Enderecos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EnderecoId,Uf,Address")] Endereco endereco)
+        public  IActionResult Edit(int id, [Bind("EnderecoId,Uf,Address")] Endereco endereco)
         {
             if (id != endereco.EnderecoId)
             {
@@ -101,8 +104,8 @@ namespace Domain.Controllers
             {
                 try
                 {
-                    //_context.Update(endereco);
-                    //await _context.SaveChangesAsync();
+                    _enderecoRepository.Update(endereco);
+                    _enderecoRepository.Save();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -121,7 +124,7 @@ namespace Domain.Controllers
         }
 
         // GET: Enderecos/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
@@ -130,30 +133,24 @@ namespace Domain.Controllers
 
             //var endereco = await _context.Enderecos
             //    .FirstOrDefaultAsync(m => m.EnderecoId == id);
-            if (endereco == null)
-            {
-                return NotFound();
-            }
 
-            return View(endereco);
+            return View(_enderecoRepository.GetById((int) id));
         }
 
         // POST: Enderecos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var endereco = await _context.Enderecos.FindAsync(id);
-            _context.Enderecos.Remove(endereco);
-            await _context.SaveChangesAsync();
+            _enderecoRepository.Remove(_enderecoRepository.GetById((int)id));
+            _enderecoRepository.Save();
             return RedirectToAction(nameof(Index));
         }
 
         private bool EnderecoExists(int id)
         {
-            return _context.Enderecos.Any(e => e.EnderecoId == id);
+            return (bool)_enderecoRepository.GetById(id);
         }
 
-        **/
     }
 }

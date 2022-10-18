@@ -47,6 +47,5 @@ namespace Domain.Repositories
         }
 
 
-        
     }
 }

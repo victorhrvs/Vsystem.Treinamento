@@ -44,5 +44,14 @@ namespace DataAccess.EFCore.Repositories
             _context.Set<T>().Remove(entity);
         }
 
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
+
+        public void Update(T entity)
+        {
+            _context.Entry(entity).State = EntityState.Modified;
+        }
     }
 }
