@@ -59,7 +59,7 @@ namespace Domain.Views.Home
             {
                 
                 _alunoRepository.Add(aluno);
-                //_alunoRepository.Save();
+                _alunoRepository.Save();
 
                 return RedirectToAction(nameof(Index));
             }
@@ -100,7 +100,7 @@ namespace Domain.Views.Home
             {
                 try
                 {
-                    _alunoRepository.Add(aluno);
+                    _alunoRepository.Update(aluno);
                     _alunoRepository.Save();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -116,7 +116,7 @@ namespace Domain.Views.Home
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EnderecoFk"] = new SelectList(_enderecoRepository.GetAll(), "EnderecoId", "EnderecoId", aluno.EnderecoFk);
+            ViewData["EnderecoFk"] = new SelectList(_enderecoRepository.GetAll(), "EnderecoId", "Address", aluno.EnderecoFk);
             return View(aluno);
         }
 
@@ -139,6 +139,7 @@ namespace Domain.Views.Home
         public IActionResult DeleteConfirmed(int id)
         {
             _alunoRepository.Remove(_alunoRepository.GetById(id));
+            _alunoRepository.Save();
 
             return RedirectToAction(nameof(Index));
         }

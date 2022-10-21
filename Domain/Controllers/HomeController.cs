@@ -22,16 +22,18 @@ namespace Domain.Controllers
 
         public  IActionResult Resultado(string pesquisa)
         {
-            var alunos = _context.Alunos.Where(s => s.Nome == pesquisa)
-                        .Include(s => s.EnderecoFkNavigation)
+            var resultado = _context.Alunos
+                        .Include(x => x.EnderecoFkNavigation)
+                        .Where(x => x.Nome == pesquisa || x.EnderecoFkNavigation.Address == pesquisa || x.EnderecoFkNavigation.Uf == pesquisa)
                         .ToList();
 
-            if (alunos == null)
+
+            if (resultado == null)
             {
                 return NotFound();
             }
 
-            return View(alunos);
+            return View(resultado);
         }
 
         public IActionResult Index()
