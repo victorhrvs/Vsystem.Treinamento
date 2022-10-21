@@ -44,7 +44,7 @@ namespace Domain.Views.Home
         // GET: Alunos/Create
         public IActionResult Create()
         {
-            ViewData["EnderecoFk"] = new SelectList(_enderecoRepository.GetAll(), "EnderecoId", "EnderecoId");
+            ViewData["EnderecoFk"] = new SelectList(_enderecoRepository.GetAll(), "EnderecoId", "Address");
             return View();
         }
 
@@ -59,11 +59,11 @@ namespace Domain.Views.Home
             {
                 
                 _alunoRepository.Add(aluno);
-                _alunoRepository.Save();
+                //_alunoRepository.Save();
 
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EnderecoFk"] = new SelectList(_enderecoRepository.GetAll(), "EnderecoId", "EnderecoId",  aluno?.EnderecoFk.ToString());
+            ViewData["EnderecoFk"] = new SelectList(_enderecoRepository.GetAll(), "EnderecoId", "Address", aluno?.EnderecoFk.ToString());
             return View(aluno);
         }
 
