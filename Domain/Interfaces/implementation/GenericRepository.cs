@@ -17,7 +17,7 @@ namespace DataAccess.EFCore.Repositories
         {
             _context = context;
         }
-
+         
         public void Add(T entity)
         {
             _context.Set<T>().Add(entity);
