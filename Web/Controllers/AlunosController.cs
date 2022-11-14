@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Domain.Models;
 using Domain.Repositories;
 using Domain.Entities;
+using Domain.Business;
 
 namespace Domain.Views.Home
 {
@@ -27,8 +28,8 @@ namespace Domain.Views.Home
         // GET: Alunos
         public IActionResult Index()
         {
-
-            return View(_alunoRepository.GetAll());
+            Business.AlunosBusiness aluno = new Business.AlunosBusiness(_alunoRepository, _enderecoRepository);
+            return View(aluno.Index());
         }
 
         // GET: Alunos/Details/5
@@ -38,12 +39,16 @@ namespace Domain.Views.Home
             {
                 return NotFound();
             }
-            return View(_alunoRepository.GetById((int)id));
+            Business.AlunosBusiness aluno = new Business.AlunosBusiness(_alunoRepository, _enderecoRepository);
+
+            return View(aluno.Details(id));
         }
 
         // GET: Alunos/Create
         public IActionResult Create()
         {
+            //Business.AlunosBusiness aluno = new AlunosBusiness(_alunoRepository, _enderecoRepository);
+            //aluno.Create();
             ViewData["EnderecoFk"] = new SelectList(_enderecoRepository.GetAll(), "EnderecoId", "Address");
             return View();
         }
@@ -57,9 +62,8 @@ namespace Domain.Views.Home
         {
             if (ModelState.IsValid)
             {
-                
-                _alunoRepository.Add(aluno);
-                _alunoRepository.Save();
+                Business.AlunosBusiness novoAluno = new AlunosBusiness(_alunoRepository, _enderecoRepository);
+                novoAluno.Create(aluno);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -75,8 +79,11 @@ namespace Domain.Views.Home
                     return NotFound();
                 }
 
-            var aluno = _alunoRepository.GetById((int)id);
-                if (aluno == null)
+            Business.AlunosBusiness alunoSelecionado = new AlunosBusiness(_alunoRepository, _enderecoRepository);
+            
+
+            var aluno = alunoSelecionado.Edit(id);
+            if (aluno == null)
                 {
                     return NotFound();
                 }
@@ -100,8 +107,8 @@ namespace Domain.Views.Home
             {
                 try
                 {
-                    _alunoRepository.Update(aluno);
-                    _alunoRepository.Save();
+                    Business.AlunosBusiness alunoSelecionado = new AlunosBusiness(_alunoRepository, _enderecoRepository);
+                    alunoSelecionado.Edit(id, aluno);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -127,10 +134,9 @@ namespace Domain.Views.Home
             {
                 return NotFound();
             }
+            Business.AlunosBusiness alunoSelecionado = new AlunosBusiness(_alunoRepository, _enderecoRepository);
 
-
-
-            return View(_alunoRepository.GetById((int)id));
+            return View(alunoSelecionado.Delete(id));
         }
 
         // POST: Alunos/Delete/5
@@ -138,8 +144,8 @@ namespace Domain.Views.Home
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            _alunoRepository.Remove(_alunoRepository.GetById(id));
-            _alunoRepository.Save();
+            Business.AlunosBusiness alunoSelecionado = new AlunosBusiness(_alunoRepository, _enderecoRepository);
+            alunoSelecionado.DeleteConfirmed(id);
 
             return RedirectToAction(nameof(Index));
         }

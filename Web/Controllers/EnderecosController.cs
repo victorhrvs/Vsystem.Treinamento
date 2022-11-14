@@ -19,25 +19,11 @@ namespace Domain.Controllers
             _enderecoRepository = enderecoRepository;
         }
 
-        // Content
-        /*
-        public async Task<IActionResult> Resultado(int? id)
-        {
-            if (id != null)
-            {
-                var endereco = await _context.Enderecos
-                        .FirstOrDefaultAsync(m => m.EnderecoId == id);
-                return View(endereco);
-            }
-            return NotFound();
-        } */
-
-
-
         // GET: Enderecos
-        public  IActionResult Index()
+        public IActionResult Index()
         {
-            return View(model: _enderecoRepository.GetAll());
+            Business.EnderecosBusiness endereco = new Business.EnderecosBusiness(_enderecoRepository);
+            return View(model: endereco.Index(_enderecoRepository));
         }
 
         // GET: Enderecos/Details/5
@@ -48,8 +34,9 @@ namespace Domain.Controllers
                 return NotFound();
             }
 
+            Business.EnderecosBusiness endereco = new Business.EnderecosBusiness(_enderecoRepository);
 
-            return View(_enderecoRepository.GetById((int)id));
+            return View(endereco.Details(id));
         }
 
         // GET: Enderecos/Create
@@ -63,19 +50,18 @@ namespace Domain.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("EnderecoId,Uf,Address")] Endereco endereco)
+        public IActionResult Create([Bind("EnderecoId,Uf,Address")] Endereco novoEndereco)
         {
             if (ModelState.IsValid)
             {
-
-                
-                _enderecoRepository.Add(endereco);
-                _enderecoRepository.Save();
+                Business.EnderecosBusiness endereco = new Business.EnderecosBusiness(_enderecoRepository);
+                endereco.Create(novoEndereco);
 
                 return RedirectToAction(nameof(Index));
             }
-            return View(endereco);
+            return View(novoEndereco);
         }
+
 
         // GET: Enderecos/Edit/5
         public IActionResult Edit(int? id)
@@ -84,16 +70,18 @@ namespace Domain.Controllers
             {
                 return NotFound();
             }
+            Business.EnderecosBusiness endereco = new Business.EnderecosBusiness(_enderecoRepository);
 
-            return View(_enderecoRepository.GetById((int)id));
+
+            return View(endereco.Edit(id));
         }
-        
+
         // POST: Enderecos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public  IActionResult Edit(int id, [Bind("EnderecoId,Uf,Address")] Endereco endereco)
+        public IActionResult Edit(int id, [Bind("EnderecoId,Uf,Address")] Endereco endereco)
         {
             if (id != endereco.EnderecoId)
             {
@@ -102,26 +90,25 @@ namespace Domain.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                Business.EnderecosBusiness local = new Business.EnderecosBusiness(_enderecoRepository);
+                var res = local.Edit(id, endereco);
+                if (res == null)
                 {
-                    _enderecoRepository.Update(endereco);
-                    _enderecoRepository.Save();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!EnderecoExists(endereco.EnderecoId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(endereco);
+            else
+            {
+                return NotFound();
+            }
+
         }
+
+
 
         // GET: Enderecos/Delete/5
         public IActionResult Delete(int? id)
@@ -133,8 +120,9 @@ namespace Domain.Controllers
 
             //var endereco = await _context.Enderecos
             //    .FirstOrDefaultAsync(m => m.EnderecoId == id);
-
-            return View(_enderecoRepository.GetById((int) id));
+            Business.EnderecosBusiness local = new Business.EnderecosBusiness(_enderecoRepository);
+            
+            return View(local.Delete(id));
         }
 
         // POST: Enderecos/Delete/5
@@ -142,8 +130,9 @@ namespace Domain.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            _enderecoRepository.Remove(_enderecoRepository.GetById((int)id));
-            _enderecoRepository.Save();
+            Business.EnderecosBusiness local = new Business.EnderecosBusiness(_enderecoRepository);
+
+            local.DeleteConfirmed(id);
             return RedirectToAction(nameof(Index));
         }
 
