@@ -1,23 +1,14 @@
 ﻿@model IEnumerable<Domain.Entities.Endereco>
 
-@{
-    Layout = null;
-}
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
+
             <th>
                 @Html.DisplayNameFor(model => model.Uf)
             </th>
@@ -28,22 +19,53 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Uf)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EnderecoId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EnderecoId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EnderecoId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr class="enderecoIdRow" id="@item.EnderecoId@@row">
+                <td>
+                    <div class="enderecoId" style="display: none">
+                        @Html.DisplayFor(modelItem => item.EnderecoId)
+                    </div>
+                    @Html.DisplayFor(modelItem => item.Uf)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.EnderecoId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.EnderecoId">Details</a> |
+                    <!--<a asp-action="Delete" asp-route-id="@item.EnderecoId">Delete</a>-->
+                    <button class="btn btn-primary" asp-route-id="@item.EnderecoId" onClick="handleRemove(@item.EnderecoId)">
+                        Deletar
+                    </button>
+
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
-</body>
-</html>
+
+
+<script>
+    function handleRemove(clicked_id) {
+        // alert(clicked_id);
+        var answer = window.confirm("Deseja deletar?");
+        if (answer) {
+            //Url.Action(action: "Delete", controller: "Endereco")
+            var url = "/deletar/" + clicked_id;
+
+            fetch(url, {
+                method: "POST"
+            }).then(response => {
+                if (response.ok) {
+                    let row = document.getElementById(clicked_id + "@@row");
+                    row.style.display = 'none';
+                }
+            });
+        }
+        else {
+            pass;
+        }
+
+    }
+</script>

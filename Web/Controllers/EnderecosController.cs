@@ -126,8 +126,8 @@ namespace Domain.Controllers
         }
 
         // POST: Enderecos/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost()]
+        [Route("/deletar/{id:int}")]
         public IActionResult DeleteConfirmed(int id)
         {
             Business.EnderecosBusiness local = new Business.EnderecosBusiness(_enderecoRepository);
